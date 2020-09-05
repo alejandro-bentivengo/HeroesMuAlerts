@@ -6,7 +6,9 @@ import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainFrame extends JFrame {
 
@@ -26,12 +28,14 @@ public class MainFrame extends JFrame {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         try {
-            Image icon = toolkit
-                    .createImage(MainFrame
-                            .class
-                            .getResourceAsStream("/img/bell.png")
-                            .readAllBytes()
-                    );
+            InputStream is = MainFrame.class.getResourceAsStream("/img/bell.png");
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[16384];
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            Image icon = toolkit.createImage(buffer.toByteArray());
             this.setIconImage(icon);
         } catch (IOException e) {
             e.printStackTrace();

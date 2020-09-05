@@ -1,5 +1,7 @@
 package org.benti.process;
 
+import org.benti.util.MapBuilder;
+
 import java.util.Map;
 
 public class AlertHandlerFactory {
@@ -9,37 +11,50 @@ public class AlertHandlerFactory {
 
 
     private static Map<UserType, Map<ResetType, Integer>> instantiateLevels() {
-        return Map.of(
-                UserType.FREE,
-                Map.of(
-                        ResetType.RR,
-                        400,
-                        ResetType.MR,
-                        400,
-                        ResetType.C4,
-                        520
-                ),
-                UserType.VIP,
-                Map.of(
-                        ResetType.RR,
-                        380,
-                        ResetType.MR,
-                        380,
-                        ResetType.C4,
-                        500
-                )
-        );
+        return new MapBuilder<UserType, Map<ResetType, Integer>>()
+                .addRecord(
+                        UserType.FREE,
+                        new MapBuilder<ResetType, Integer>()
+                                .addRecord(
+                                        ResetType.RR,
+                                        400)
+                                .addRecord(
+                                        ResetType.MR,
+                                        400)
+                                .addRecord(
+                                        ResetType.C4,
+                                        520)
+                                .build()
+                ).addRecord(
+                        UserType.VIP,
+                        new MapBuilder<ResetType, Integer>()
+                                .addRecord(
+                                        ResetType.RR,
+                                        380)
+                                .addRecord(
+                                        ResetType.MR,
+                                        380)
+                                .addRecord(
+                                        ResetType.C4,
+                                        500)
+                                .build()
+                ).build();
+
     }
 
     private static Map<ResetType, String> instantiateRegex() {
-        return Map.of(
-                ResetType.RR,
-                "\\] Level: \\[(\\d*)\\]",
-                ResetType.MR,
-                "Master Level: \\[(\\d*)\\]",
-                ResetType.C4,
-                "Master Level: \\[(\\d*)\\]"
-        );
+        return new MapBuilder<ResetType, String>()
+                .addRecord(
+                        ResetType.RR,
+                        "\\] Level: \\[(\\d*)\\]")
+                .addRecord(
+                        ResetType.MR,
+                        "Master Level: \\[(\\d*)\\]")
+                .addRecord(
+                        ResetType.C4,
+                        "Master Level: \\[(\\d*)\\]")
+                .build();
+
     }
 
 
